@@ -1,0 +1,110 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+#display columns
+pd.set_option("display.max_columns",24)
+
+
+dataset = pd.read_excel("/content/Superstore_USA.xlsx")
+
+
+# top 5 records
+dataset.head()
+
+
+# shape i.e dimensions of the dataset
+dataset.shape
+
+
+# displays missing values
+dataset.isnull().sum()
+
+
+dataset['Product Base Margin'].fillna(dataset['Product Base Margin'].mean(),inplace = True)
+
+
+
+dataset['State or Province'].value_counts()
+
+
+dataset['State or Province'].value_counts()[:5]
+
+
+dataset.info()
+
+#Order year
+dataset["Order year"] = dataset['Order Date'].dt.year
+print(dataset["Order year"])
+
+
+dataset["Order year"].value_counts()
+
+
+plt.figure(figsize=(5,4))
+sns.countplot(x ="Order year", data= dataset)
+plt.show()
+
+
+#product category
+plt.figure(figsize=(5,4))
+sns.countplot(x ="Product Category", data= dataset, hue="Product Category")
+plt.show()
+
+
+plt.figure(figsize=(6,4))
+sns.barplot(x="Product Category",y="Profit",data=dataset, estimator ='sum')
+plt.show()
+
+
+plt.figure(figsize=(6,4))
+sns.countplot(x ="Product Category", data= dataset[dataset["Product Category"]=="Office Supplies"], hue="Product Sub-Category")
+plt.show()
+
+
+
+Category segment
+plt.figure(figsize=(5,4))
+sns.countplot(x ="Customer Segment", data= dataset)
+plt.show()
+
+
+Ship Mode
+dataset['Ship Mode'].value_counts()
+
+
+x = dataset['Ship Mode'].value_counts().index
+y = dataset['Ship Mode'].value_counts().values
+
+
+
+plt.figure(figsize=(5,4))
+plt.pie(y,labels=x,startangle=60,autopct ="%0.2f%%")
+plt.legend()
+plt.show()
+
+
+plt.figure(figsize=(5,4))
+sns.countplot(x ="Ship Mode", data= dataset, hue="Product Category")
+plt.show()
+
+
+# number of customers based on order priority
+dataset['Order Priority'].value_counts()
+
+
+dataset['Order Priority'].unique()
+
+
+# replace above critocal(space) 
+dataset['Order Priority'] = dataset["Order Priority"].replace("Critical ","Critical")
+
+
+# Graphical Analysis
+
+plt.figure(figsize=(5,3))
+sns.countplot(x = "Order Priority",data = dataset)
+plt.title("Count of Order Priority")
+plt.savefig("Count of Order Priority.jpg")
+plt.show()
